@@ -23,6 +23,15 @@ def create_token():
             token.write(creds.to_json())
     
     return creds
+'''
+def get_sheet_data(service, spreadsheet_id, range_name):
+    try:
+        sheet = service.spreadsheets()
+        result = sheet.values().get(spreadsheetId=spreadsheet_id, range=range_name).execute()
+        return result.get("values", [])
+    except HttpError as err:
+        print(f"An error occurred: {err}")
+        return None
 
 def main():
     creds = create_token()
@@ -33,3 +42,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    '''
