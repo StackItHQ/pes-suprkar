@@ -60,3 +60,8 @@ All the best ✨.
 
 ## Developer's Section
 *Add your video here, and your approach to the problem (optional). Leave some comments for us here if you want, we will be reading this :)*
+Thought process while approaching this problem
+1.At the first glance itself I have noticed that google sheets is the main crux of the problem statement,so to begin approaching this problem I first will look into the google sheets API documentation available at [Google Sheets API documentation](https://developers.google.com/sheets/api/guides/concepts).
+2.Since I would need a database for collecting realtime changes made to the sheet I would be using MySQL for tackling this problem.
+3.Since python supports the google sheets api,the coding language for this problem will be in python.
+
