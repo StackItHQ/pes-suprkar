@@ -1,11 +1,35 @@
+import os.path
+from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from google.oauth2 import service_account
+from google_auth_oauthlib.flow import InstalledAppFlow
 
-class GoogleSheetsHandler:
-    def __init__(self, credentials_path, sheet_id):
-        self.sheet_id = sheet_id
-        self.creds = service_account.Credentials.from_service_account_file(
-            credentials_path, scopes=['https://www.googleapis.com/auth/spreadsheets']
-        )
-        self.service = build('sheets', 'v4', credentials=self.creds)
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+
+def create_token():
+    creds = None
+    
+    if os.path.exists("token.json"):
+        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    
+   
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            creds = flow.run_local_server(port=0)
+       
+        with open("token.json", "w") as token:
+            token.write(creds.to_json())
+    
+    return creds
+
+def main():
+    creds = create_token()
+    if creds:
+        print("Token has been successfully created and saved to token.json")
+    else:
+        print("Failed to create token")
+
+if __name__ == "__main__":
+    main()
