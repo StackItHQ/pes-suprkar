@@ -60,3 +60,17 @@ All the best ✨.
 
 ## Developer's Section
 *Add your video here, and your approach to the problem (optional). Leave some comments for us here if you want, we will be reading this :)*
+### Thought Process for Solving the Problem:
+
+1. **Understanding the Core Requirement:**
+   - At first glance, it's clear that Google Sheets is central to the problem. The main task revolves around working with Google Sheets data.
+   - Therefore, my first step is to explore the **Google Sheets API**. I will refer to the [Google Sheets API documentation](https://developers.google.com/sheets/api) for guidance.
+
+2. **Database Setup:**
+   - To handle real-time changes to the sheet, I would also need a database to store the data. I will use **MySQL** for this purpose, as it is well-suited for structured data storage.
+
+3. **Programming Language Choice:**
+   - Since Python has support for the Google Sheets API and is efficient for handling data operations, I will use **Python** as the coding language for this project.
+
+4.Went through the API documentation at [Google Sheets Python](https://developers.google.com/sheets/api/quickstart/python) and setup the Google Cloud Project to get the necessary credentials for this API.
+
