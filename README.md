@@ -72,5 +72,7 @@ All the best ✨.
 3. **Programming Language Choice:**
    - Since Python has support for the Google Sheets API and is efficient for handling data operations, I will use **Python** as the coding language for this project.
 
-4.Went through the API documentation at [Google Sheets Python](https://developers.google.com/sheets/api/quickstart/python) and setup the Google Cloud Project to get the necessary credentials for this API.
+4. **Went through the API documentation** at [Google Sheets Python](https://developers.google.com/sheets/api/quickstart/python) and setup the Google Cloud Project to get the necessary credentials for this API.
 
+5. **Created Logs**
+   -Instead of the normal GPT approach I went ahead with a log based approach to log every change occuring in the sheet by comparing the two jsons and running sql queries for the logged changes
