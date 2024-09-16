@@ -1,0 +1,23 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+*.venv
+*.env
+
+# Google Sheets API credentials and tokens
+credentials.json
+token.json
+
+# Log files
+*.log
+
+# State files
+*.json
+
+# Database files
+*.db
+*.sqlite3
