@@ -11,20 +11,69 @@ def get_sheet_data(creds, spreadsheet_id, range_name):
         print(f"An error occurred: {err}")
         return None
 
-def compare_and_log_changes(old_data, new_data, log_file):
+def compare_and_log_changes(new_data, log_file, state_file):
+    timestamp = datetime.now().isoformat()
+    
+    try:
+        with open(state_file, 'r') as f:
+            old_data = json.load(f)
+    except FileNotFoundError:
+        old_data = None
+
+    changes = []
+
     with open(log_file, 'a') as f:
+        f.write(f"Timestamp: {timestamp}\n")
+        
         if not old_data:
             f.write("Initial data load:\n")
-            for row in new_data:
-                f.write(f"New row: {','.join(row)}\n")
-            return
-
-        for i, (old_row, new_row) in enumerate(zip(old_data, new_data)):
-            if old_row != new_row:
-                f.write(f"Row {i+1} changed: {','.join(old_row)} -> {','.join(new_row)}\n")
+            for i, row in enumerate(new_data):
+                f.write(f"New row {i+1}: {','.join(row)}\n")
+                changes.append({"type": "new_row", "row": i+1, "data": row})
+        else:
+            for i, (old_row, new_row) in enumerate(zip(old_data, new_data)):
+                if old_row != new_row:
+                    f.write(f"Row {i+1} changed: {','.join(old_row)} -> {','.join(new_row)}\n")
+                    changes.append({"type": "row_changed", "row": i+1, "old": old_row, "new": new_row})
+                    
+                    # Log cell-level changes
+                    for j, (old_cell, new_cell) in enumerate(zip(old_row, new_row)):
+                        if old_cell != new_cell:
+                            f.write(f"  Cell {i+1},{j+1} changed: {old_cell} -> {new_cell}\n")
+            
+            if len(new_data) > len(old_data):
+                for i, row in enumerate(new_data[len(old_data):], start=len(old_data)):
+                    f.write(f"New row added: {','.join(row)}\n")
+                    changes.append({"type": "new_row", "row": i+1, "data": row})
+            elif len(new_data) < len(old_data):
+                f.write(f"Rows deleted. Old row count: {len(old_data)}, New row count: {len(new_data)}\n")
+                changes.append({"type": "rows_deleted", "old_count": len(old_data), "new_count": len(new_data)})
         
-        if len(new_data) > len(old_data):
-            for row in new_data[len(old_data):]:
-                f.write(f"New row added: {','.join(row)}\n")
-        elif len(new_data) < len(old_data):
-            f.write(f"Rows deleted. Old row count: {len(old_data)}, New row count: {len(new_data)}\n")
+        f.write("\n")  # Add a blank line for readability between log entries
+
+    # Save the new state
+    with open(state_file, 'w') as f:
+        json.dump(new_data, f)
+
+    return changes
+
+def get_change_history(log_file, limit=10):
+    history = []
+    with open(log_file, 'r') as f:
+        lines = f.readlines()
+        
+    current_entry = None
+    for line in reversed(lines):
+        if line.startswith("Timestamp:"):
+            if current_entry:
+                history.append(current_entry)
+                if len(history) >= limit:
+                    break
+            current_entry = {"timestamp": line.split(": ")[1].strip(), "changes": []}
+        elif current_entry is not None:
+            current_entry["changes"].append(line.strip())
+
+    if current_entry and len(history) < limit:
+        history.append(current_entry)
+
+    return history
