@@ -76,3 +76,7 @@ All the best ✨.
 
 5. **Created Logs**
    -Instead of the normal GPT approach I went ahead with a log based approach to log every change occuring in the sheet by comparing the two jsons and running sql queries for the logged changes
+
+
+https://github.com/user-attachments/assets/3f06e69d-70b3-4e5a-b36d-e2d4827dfb3c
+
